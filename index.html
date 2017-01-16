@@ -1,0 +1,60 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<script>
+    function showResults(data) {
+        $('#response').text(JSON.stringify(data, null, 4));
+    }
+
+    function myCallback(data, status) {
+        showResults(data);
+    }
+
+    function runQuery() {
+        var query = $("#query").val();
+        var gremlinServer = $("#server_endpoint").val();
+
+        if (!gremlinServer) {
+            gremlinServer = "http://localhost:8182/";
+        }
+
+        if (!query) {
+            query = "";
+        }
+
+        var data = {"gremlin": query};
+
+        $.ajax({
+            url: gremlinServer,
+            type: "POST",
+            crossDomain: true,
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: myCallback,
+            error: function (xhr, status) {
+                showResults(xhr);
+            }
+        });
+    }
+</script>
+
+Gremlin Server Endpoint: <input type="text" id="server_endpoint" value="http://localhost:8182/"/>
+
+<p>
+    Type in your query and press Submit.
+</p>
+
+<textarea rows="10" cols="80" id="query"></textarea>
+<br>
+<input type="submit" value="Submit" onclick="runQuery();"/>
+<p>
+<p>Response</p>
+<textarea id="response" rows="20" cols="80">
+</textarea>
+
+</p>
+
+</body>
+</html>
