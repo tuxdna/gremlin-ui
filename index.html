@@ -14,17 +14,25 @@
 
     function runQuery() {
         var query = $("#query").val();
+        var bindings = $("#bindings").val();
         var gremlinServer = $("#server_endpoint").val();
 
         if (!gremlinServer) {
-            gremlinServer = "http://localhost:8182/";
+            gremlinServer = "http://localhost:8181/";
         }
 
         if (!query) {
             query = "";
         }
 
-        var data = {"gremlin": query};
+        if (!bindings) {
+            bindings = {};
+        }else{
+            bindings = JSON.parse(bindings);
+        }
+
+        var data = {"gremlin": query, "bindings": bindings};
+        $('#sent_query').text(JSON.stringify(data));
 
         $.ajax({
             url: gremlinServer,
@@ -40,20 +48,27 @@
     }
 </script>
 
-Gremlin Server Endpoint: <input type="text" id="server_endpoint" value="http://localhost:8182/"/>
+Gremlin Server Endpoint: <input type="text" size="60" id="server_endpoint" value="http://localhost:8181/"/>
 
 <p>
     Type in your query and press Submit.
 </p>
 
-<textarea rows="10" cols="80" id="query"></textarea>
+Query string:
+<br>
+<textarea rows="10" cols="80" id="query" placeholder="g.V().count() + x"></textarea>
+<br>
+Bound parameters:
+<br>
+<textarea rows="10" cols="80" id="bindings" placeholder='{"x": 10}'></textarea>
 <br>
 <input type="submit" value="Submit" onclick="runQuery();"/>
 <p>
+<p id="sent_query"/>
+<br>
 <p>Response</p>
 <textarea id="response" rows="20" cols="80">
 </textarea>
-
 </p>
 
 </body>
