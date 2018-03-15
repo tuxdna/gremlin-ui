@@ -11,3 +11,7 @@ Now visit http://localhost:8080/ ,
  * press Submit button.
 
 This should return the Query results formatted in Response area.
+
+
+![How to use Bound params in queryes?](docs/bound-queries.png)
+
